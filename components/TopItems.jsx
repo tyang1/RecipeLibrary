@@ -8,6 +8,11 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: theme.spacing(16),
       height: theme.spacing(16),
+      transition: "0.5s",
+      "&:hover": {
+        width: theme.spacing(18),
+        height: theme.spacing(18),
+      },
     },
   },
 }));
