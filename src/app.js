@@ -11,10 +11,10 @@ export default function App() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-    const contentView = {
-      0: <MyRecipe/>,
-      1: <h2>Hello Recipe Library</h2>,
-    };
+  const contentView = {
+    0: <MyRecipe />,
+    1: <h2>Hello Recipe Library</h2>,
+  };
   return (
     <div>
       <RecipeMenu value={value} handleChange={handleChange} />
