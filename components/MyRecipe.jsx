@@ -6,19 +6,20 @@ const styles = {};
 export default function MyRecipe() {
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
+    console.log(newValue)
     setValue(newValue);
   };
   return (
     <div>
       <TopItems
         value={value}
-        hoverChange={handleChange}
+        selectHandler={handleChange}
         number={3}
         title="Recently Viewed Recipes"
       />
       <TopItems
         value={value}
-        hoverChange={handleChange}
+        selectHandler={handleChange}
         number={3}
         title="Most Popular Recipes"
       />
