@@ -1,22 +1,23 @@
 import React from "react";
+import { connect } from "react-redux";
 import TopItems from "./TopItems.jsx";
 
-export default function MyRecipe() {
-  const [value, setValue] = React.useState(0);
+function RecipeItems({ top3Recipes, recentRecipes }) {
+  const [value, setValue] = React.useState({ top3Recipes, recentRecipes });
   const handleChange = (event, newValue) => {
-    console.log(newValue)
+    console.log(newValue);
     setValue(newValue);
   };
   return (
     <div>
       <TopItems
-        value={value}
+        value={{ ...top3Recipes }}
         selectHandler={handleChange}
         number={3}
         title="Recently Viewed Recipes"
       />
       <TopItems
-        value={value}
+        value={{ ...recentRecipes }}
         selectHandler={handleChange}
         number={3}
         title="Most Popular Recipes"
@@ -24,3 +25,14 @@ export default function MyRecipe() {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  const { top3Recipes, recentRecipes } = state;
+  return {
+    top3Recipes: top3Recipes,
+    recentRecipes: recentRecipes,
+  };
+};
+
+const MyRecipe = connect(mapStateToProps)(RecipeItems);
+export default MyRecipe;
