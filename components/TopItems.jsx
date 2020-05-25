@@ -17,8 +17,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function numberToPaper({ number, title, classes, selectHandler }) {
+function paperContent(value) {
+  let content = (value && value.img) || null;
+  return <div>{content}</div>;
+}
+function numberToPaper({ number, title, classes, selectHandler, value }) {
   const list = [];
+  console.log("value", value);
   for (let i = 0; i < number; i++) {
     list.push(
       <div
@@ -28,7 +33,7 @@ function numberToPaper({ number, title, classes, selectHandler }) {
         }}
         className={classes.root}
       >
-        <Paper elevation={i + 1} />
+        <Paper elevation={i + 1}>{paperContent(value[i])}</Paper>
       </div>
     );
   }
@@ -38,7 +43,7 @@ function numberToPaper({ number, title, classes, selectHandler }) {
 export default function TopItems(props) {
   const classes = useStyles(value);
   const { title, number, selectHandler, value } = props;
-  const paper = numberToPaper({ number, title, classes, selectHandler });
+  const paper = numberToPaper({ number, title, classes, selectHandler, value });
 
   return (
     <div>
