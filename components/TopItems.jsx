@@ -23,7 +23,6 @@ function paperContent(value) {
 }
 function numberToPaper({ number, title, classes, selectHandler, value }) {
   const list = [];
-  console.log("value", value);
   for (let i = 0; i < number; i++) {
     list.push(
       <div
