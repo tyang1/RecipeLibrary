@@ -22,11 +22,29 @@ userController.getAllUsers = (req, res, next) => {
   });
 };
 
+const getUserId = (req, res, userId, next) => {
+  req.locals = {
+    userId,
+    toRedirect: () => res.redirect("/app/home"),
+  };
+  next();
+};
+
+const verifyUser = (req, res, next) => {
+  User.findOne({ username: req.body.username }, (err, user) => {
+    if (!err && user.password === req.body.password) {
+      // res.redirect("/secret");
+      getUserId(req, res, user._id, next);
+    } else {
+      res.redirect("/signup");
+    }
+  });
+};
+
 /**
  * createUser - create and save a new User into the database.
  */
 userController.createUser = (req, res, next) => {
-  console.log("inside createUser");
   let newUser = new User({
     username: req.body.username,
     password: req.body.password,
@@ -36,7 +54,8 @@ userController.createUser = (req, res, next) => {
       throw new Error(err);
     } else {
       //redirect to '/secret' route
-      res.redirect("/secret");
+      // res.redirect("/secret");
+      verifyUser(req, res, next);
     }
   });
   // write code here
@@ -48,14 +67,7 @@ userController.createUser = (req, res, next) => {
  * against the password stored in the database.
  */
 userController.verifyUser = (req, res, next) => {
-  User.findOne({ username: req.body.username }, (err, user) => {
-    if (!err && user.password === req.body.password) {
-      console.log("inside verifyUser", user.password);
-      res.redirect("/secret");
-    } else {
-      res.redirect("/signup");
-    }
-  });
+  verifyUser(req, res, next);
   // write code here
 };
 

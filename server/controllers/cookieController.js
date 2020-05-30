@@ -1,3 +1,4 @@
+const userController = require("./userController");
 const cookieController = {};
 
 /**
@@ -5,6 +6,9 @@ const cookieController = {};
  */
 cookieController.setCookie = (req, res, next) => {
   // write code here
+  res.cookie("codesmith", "hi"); //Sets codesmith = hi
+  res.cookie("secret", parseInt(Math.random() * 100));
+  next();
 };
 
 /**
@@ -12,6 +16,11 @@ cookieController.setCookie = (req, res, next) => {
  */
 cookieController.setSSIDCookie = (req, res, next) => {
   // write code here
+  // let { userId, toRedirect } = userController.getUserId();
+  let { userId, toRedirect } = req.locals;
+  console.log("inside setSSIDCookie", userId, toRedirect);
+  res.cookie("ssid", userId);
+  toRedirect();
 };
 
 module.exports = cookieController;

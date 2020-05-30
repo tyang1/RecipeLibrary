@@ -16,12 +16,19 @@ mongoose.connect(mongoURI);
 
 let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
+
 /**
  * Set our Express view engine as ejs.
  * This means whenever we call res.render, ejs will be used to compile the template.
  * ejs templates are located in the client/ directory
  */
 app.set("view engine", "ejs");
+app.use("/app", express.static("public"));
+
+app.get("/app/home", (req, res) => {
+  console.log("here", __dirname);
+  res.sendFile("index.html", { root: "./public" });
+});
 
 /**
  * Automatically parse urlencoded body content from incoming requests and place it
@@ -41,14 +48,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * root
  */
 app.use(cookieParser());
-app.get("/", (req, res) => {
-  /**
-   * Since we set `ejs` to be the view engine above, `res.render` will parse the
-   * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
-   * a string of proper HTML which will be sent to the client!
-   */
-  res.render("./../client/index");
-});
+app.get(
+  "/",
+  userController.getAllUsers,
+  cookieController.setCookie,
+  (req, res) => {
+    /**
+     * Since we set `ejs` to be the view engine above, `res.render` will parse the
+     * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
+     * a string of proper HTML which will be sent to the client!
+     */
+    res.render("./../client/index");
+  }
+);
 
 /**
  * signup
@@ -58,12 +70,12 @@ app.get("/signup", (req, res) => {
   res.render("./../client/signup", { error: null });
 });
 
-app.post("/signup", userController.createUser);
+app.post("/signup", userController.createUser, cookieController.setSSIDCookie);
 
 /**
  * login
  */
-app.post("/login", userController.verifyUser);
+app.post("/login", userController.verifyUser, cookieController.setSSIDCookie);
 
 /**
  * Authorized routes
