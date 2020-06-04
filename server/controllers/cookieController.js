@@ -6,8 +6,8 @@ const cookieController = {};
  */
 cookieController.setCookie = (req, res, next) => {
   // write code here
-  res.cookie("codesmith", "hi"); //Sets codesmith = hi
-  res.cookie("secret", parseInt(Math.random() * 100));
+  res.cookie("codesmith", "hi", { httpOnly: true }); //Sets codesmith = hi
+  res.cookie("secret", parseInt(Math.random() * 100), { httpOnly: true });
   next();
 };
 
@@ -18,8 +18,7 @@ cookieController.setSSIDCookie = (req, res, next) => {
   // write code here
   // let { userId, toRedirect } = userController.getUserId();
   let { userId, toRedirect } = req.locals;
-  console.log("inside setSSIDCookie", userId, toRedirect);
-  res.cookie("ssid", userId);
+  res.cookie("ssid", userId, { httpOnly: true });
   toRedirect();
 };
 

@@ -11,7 +11,7 @@ describe("Unit 10 Tests", () => {
   let clock;
 
   before(() => {
-    clock = sinon.useFakeTimers();
+    // clock = sinon.useFakeTimers();
   });
 
   beforeEach((done) => {
@@ -32,7 +32,7 @@ describe("Unit 10 Tests", () => {
   });
 
   after(() => {
-    clock.restore();
+    // clock.restore();
   });
 
   describe("Creating users", () => {
