@@ -13,6 +13,28 @@ module.exports = {
         exclude: /node_modules/,
         loader: "babel-loader",
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          {
+            loader: "style-loader",
+          },
+          // Translates CSS into CommonJS
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+              modules: true,
+              //   localIdentName: '[local]___[hash:base64:5]'
+            },
+          },
+          // Compiles Sass to CSS
+          {
+            loader: "sass-loader",
+          },
+        ],
+      },
     ],
   },
   devtool: "cheap-module-eval-source-map",

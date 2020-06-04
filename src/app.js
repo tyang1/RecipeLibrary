@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import RecipeMenu from "../components/AppBar.jsx";
 import Content from "../components/Content.jsx";
 import ResponsiveLayout from "../components/ResponsiveLayout.jsx";
+import RecipeTags from "../components/RecipeTags.jsx";
 // import API from "../API/API.js";
 import store from "../stores/appStores.js";
 import { Provider } from "react-redux";
@@ -21,6 +22,7 @@ export default function App() {
   const contentView = {
     0: <MyRecipe />,
     1: <h2>Hello Recipe Library</h2>,
+    2: <RecipeTags/>
   };
   const renderDesktop = () => {
     return (
