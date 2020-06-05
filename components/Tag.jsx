@@ -5,13 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function Tag(props) {
-  let { category } = props;
+  const { category, onEdit } = props;
+  const { _id } = category;
   return (
     <li style={{ display: "list-item" }}>
       <div>
         <span className={s.item}>
-          <span>{category}</span>
-          <a style={{ cursor: "pointer", marginLeft: "7px" }}>
+          <span>{category.label}</span>
+          <a
+            onClick={() => onEdit(_id)}
+            style={{ cursor: "pointer", marginLeft: "7px" }}
+          >
             <FontAwesomeIcon icon={faPencilAlt} />
           </a>
         </span>

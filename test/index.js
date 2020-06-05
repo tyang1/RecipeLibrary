@@ -128,9 +128,10 @@ describe("Unit 10 Tests", () => {
       let newNumber;
       let cookies;
       request.get("/").end((err, res) => {
-        oldNumber = getCookie(res.headers["set-cookie"], "secret");
+        console.log("res", res);
+        oldNumber = parseInt(getCookie(res.headers["set-cookie"], "secret"));
         request.get("/").end((err, res) => {
-          newNumber = getCookie(res.headers["set-cookie"], "secret");
+          newNumber = parseInt(getCookie(res.headers["set-cookie"], "secret"));
           expect(newNumber).to.be.within(0, 99);
           expect(oldNumber).to.be.within(0, 99);
           expect(newNumber).to.not.eql(oldNumber);

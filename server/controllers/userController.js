@@ -51,7 +51,10 @@ userController.createUser = (req, res, next) => {
   });
   newUser.save((err) => {
     if (err) {
-      throw new Error(err);
+      // req.session = {};
+      // req.session.error = "Incorrect username or password";
+      res.render("signup", { error: err });
+      // throw new Error(err);
     } else {
       //redirect to '/secret' route
       // res.redirect("/secret");
