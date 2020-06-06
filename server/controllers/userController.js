@@ -32,11 +32,11 @@ const getUserId = (req, res, userId, next) => {
 
 const verifyUser = (req, res, next) => {
   User.findOne({ username: req.body.username }, (err, user) => {
-    if (!err && user.password === req.body.password) {
+    if (err || !user) {
+      res.redirect("/signup");
+    } else if (user.password === req.body.password) {
       // res.redirect("/secret");
       getUserId(req, res, user._id, next);
-    } else {
-      res.redirect("/signup");
     }
   });
 };

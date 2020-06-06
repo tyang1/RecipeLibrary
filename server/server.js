@@ -25,11 +25,9 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
-console.log("what is the root path", path.join(__dirname));
 app.use("/app", express.static("public"));
 
-app.get("/app/home", (req, res) => {
-  console.log("here", __dirname);
+app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
   res.sendFile("index.html", { root: "./public" });
 });
 
@@ -71,18 +69,30 @@ app.get(
 app.use(bodyParser.json());
 app.get("/signup", (req, res) => {
   let isError = !!req.session;
-  console.log("what is the error", isError);
   let err = isError ? req.session.error : null;
   res.render("signup", { error: err });
   if (isError) delete req.session.error;
 });
 
-app.post("/signup", userController.createUser, cookieController.setSSIDCookie);
+app.post(
+  "/signup",
+  userController.createUser,
+  cookieController.setSSIDCookie,
+  sessionController.startSession
+);
 
 /**
  * login
  */
-app.post("/login", userController.verifyUser, cookieController.setSSIDCookie);
+app.post(
+  "/login",
+  userController.verifyUser,
+  cookieController.setSSIDCookie,
+  sessionController.isLoggedIn,
+  (req, res) => {
+    res.sendFile("index.html", { root: "./public" });
+  }
+);
 
 /**
  * Authorized routes
