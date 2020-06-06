@@ -19,7 +19,7 @@ cookieController.setSSIDCookie = (req, res, next) => {
   // let { userId, toRedirect } = userController.getUserId();
   let { userId, toRedirect } = req.locals;
   res.cookie("ssid", userId, { httpOnly: true });
-  toRedirect();
+  next();
 };
 
 module.exports = cookieController;

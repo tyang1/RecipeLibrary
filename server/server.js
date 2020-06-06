@@ -22,11 +22,12 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
  * This means whenever we call res.render, ejs will be used to compile the template.
  * ejs templates are located in the client/ directory
  */
+
 app.set("view engine", "ejs");
+app.set("views", path.resolve(__dirname, "../client"));
 app.use("/app", express.static("public"));
 
-app.get("/app/home", (req, res) => {
-  console.log("here", __dirname);
+app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
   res.sendFile("index.html", { root: "./public" });
 });
 
@@ -58,7 +59,7 @@ app.get(
      * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
      * a string of proper HTML which will be sent to the client!
      */
-    res.render("./../client/index");
+    res.render("index");
   }
 );
 
@@ -67,15 +68,31 @@ app.get(
  */
 app.use(bodyParser.json());
 app.get("/signup", (req, res) => {
-  res.render("./../client/signup", { error: null });
+  let isError = !!req.session;
+  let err = isError ? req.session.error : null;
+  res.render("signup", { error: err });
+  if (isError) delete req.session.error;
 });
 
-app.post("/signup", userController.createUser, cookieController.setSSIDCookie);
+app.post(
+  "/signup",
+  userController.createUser,
+  cookieController.setSSIDCookie,
+  sessionController.startSession
+);
 
 /**
  * login
  */
-app.post("/login", userController.verifyUser, cookieController.setSSIDCookie);
+app.post(
+  "/login",
+  userController.verifyUser,
+  cookieController.setSSIDCookie,
+  sessionController.isLoggedIn,
+  (req, res) => {
+    res.sendFile("index.html", { root: "./public" });
+  }
+);
 
 /**
  * Authorized routes
@@ -96,7 +113,7 @@ app.post("/login", userController.verifyUser, cookieController.setSSIDCookie);
 
 app.get("/secret", userController.getAllUsers, (err, req, res, next) => {
   let users = req.locals.users;
-  res.render("./../client/secret", { users: users });
+  res.render("secret", { users: users });
   next();
 });
 

@@ -5,8 +5,8 @@ import TopItems from "./TopItems.jsx";
 function RecipeItems({ top3Recipes, recentRecipes }) {
   const [value, setValue] = React.useState({ top3Recipes, recentRecipes });
   const handleChange = (event, newValue) => {
-    console.log(newValue);
     setValue(newValue);
+    console.log(newValue);
   };
   return (
     <div>
