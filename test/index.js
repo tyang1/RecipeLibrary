@@ -5,6 +5,7 @@ const Session = require("./../server/models/sessionModel");
 const User = require("./../server/models/userModel");
 const bcrypt = require("bcryptjs");
 const sinon = require("sinon");
+const signIn = require("../server/helpers/singIn");
 
 let test = {
   username: "test123",
@@ -36,23 +37,39 @@ describe("Unit 11 Test", () => {
       });
     });
   });
-});
-describe("Bcrypting password tests", () => {
-  it("user created password is hashed before saving to db", (done) => {
-    request
-      .post("/signup")
-      .send({ username: "test123", password: "test456" })
-      .type("form")
-      .end((err, res) => {
-        User.findOne({ username: test.username }, (err, user) => {
-          expect(err).to.be.null;
-          expect(user).to.not.be.null;
-          expect(user.password).to.not.equal(test.password);
-          done();
-        });
-      });
+  describe("JWT Auth", () => {
+    it("the user signs in have valid JWT token", (done) => {
+      request
+        .post("/signup")
+        .type("form")
+        .send({ username: "test123", password: "test456" })
+        .expect("set-cookie", /ssid=/, done);
+      // .end((err, res) => {
+      // console.log("res.headers", res.headers);
+      // let token = getCookieValue(res.headers["set-cookie"], "ssid");
+      // console.log("token intest", token);
+      // expect(signIn.verifyJWT(token)).to.be.true;
+      // done();
+      // });
+    });
   });
 });
+// xdescribe("Bcrypting password tests", () => {
+//   xit("user created password is hashed before saving to db", (done) => {
+//     request
+//       .post("/signup")
+//       .send({ username: "test123", password: "test456" })
+//       .type("form")
+//       .end((err, res) => {
+//         User.findOne({ username: test.username }, (err, user) => {
+//           expect(err).to.be.null;
+//           expect(user).to.not.be.null;
+//           expect(user.password).to.not.equal(test.password);
+//           done();
+//         });
+//       });
+//   });
+// });
 
 // describe("Unit 10 Tests", () => {
 //   let id;
@@ -366,14 +383,14 @@ describe("Bcrypting password tests", () => {
 //   });
 // });
 
-// function getCookieValue(cookie) {
-//   return cookie[0].split(";")[0].split("=")[1];
-// }
+function getCookieValue(cookie) {
+  return cookie[0].split(";")[0].split("=")[1];
+}
 
-// function getCookie(cookieArray, name) {
-//   return getCookieValue(
-//     cookieArray.filter((el) => {
-//       return el.split(";")[0].split("=")[0] === name;
-//     })
-//   );
-// }
+function getCookie(cookieArray, name) {
+  return getCookieValue(
+    cookieArray.filter((el) => {
+      return el.split(";")[0].split("=")[0] === name;
+    })
+  );
+}

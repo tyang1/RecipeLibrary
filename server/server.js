@@ -8,6 +8,8 @@ const userController = require("./controllers/userController");
 const cookieController = require("./controllers/cookieController");
 const sessionController = require("./controllers/sessionController");
 
+const signIn = require("./helpers/singIn");
+
 const app = express();
 
 const mongoURI =
@@ -21,21 +23,21 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
  * Set our Express view engine as ejs.
  * This means whenever we call res.render, ejs will be used to compile the template.
  * ejs templates are located in the client/ directory
+ * Init middlewares
  */
-
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
 app.use("/app", express.static("public"));
-
 app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
   res.sendFile("index.html", { root: "./public" });
 });
+// app.use(express.json({ extended: false }));
 
-/**
- * Automatically parse urlencoded body content from incoming requests and place it
- * in req.body
- */
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
 /**
  * --- Express Routes ---
@@ -51,8 +53,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.get(
   "/",
-  userController.getAllUsers,
-  cookieController.setCookie,
+  // userController.getAllUsers,
+  // cookieController.setCookie,
   (req, res) => {
     /**
      * Since we set `ejs` to be the view engine above, `res.render` will parse the
@@ -66,7 +68,6 @@ app.get(
 /**
  * signup
  */
-app.use(bodyParser.json());
 app.get("/signup", (req, res) => {
   let isError = !!req.session;
   let err = isError ? req.session.error : null;
@@ -77,8 +78,8 @@ app.get("/signup", (req, res) => {
 app.post(
   "/signup",
   userController.createUser,
-  cookieController.setSSIDCookie,
-  sessionController.startSession
+  cookieController.setSSIDCookie
+  // sessionController.startSession
 );
 
 /**
