@@ -39,6 +39,8 @@ app.use(
   })
 );
 
+app.use(bodyParser.json());
+
 /**
  * --- Express Routes ---
  * Express will attempt to match these routes in the order they are declared here.

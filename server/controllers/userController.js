@@ -23,21 +23,22 @@ userController.getAllUsers = (req, res, next) => {
   });
 };
 
-const getUserId = (req, res, userId, next) => {
+const getUserId = (req, res, userId) => {
   req.locals = {
     userId,
     toRedirect: () => res.redirect("/app/home"),
   };
-  next();
+  // next();
 };
 
 const verifyUser = (req, res, next) => {
   const { username, password } = req.body;
   User.findOne({ username }, (err, user) => {
     if (err || !user) {
-      res.render("/signup", { error: err });
+      res.redirect("/signup");
     } else if (bcrypt.compare(password, user.password)) {
-      getUserId(req, res, user.id, next);
+      getUserId(req, res, user.id);
+      next();
     }
   });
 };
@@ -57,6 +58,7 @@ userController.createUser = (req, res, next) => {
       res.render("signup", { error: err });
     } else {
       verifyUser(req, res, next);
+      // res.send("user created!");
     }
   });
   // write code here

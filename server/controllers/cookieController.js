@@ -29,8 +29,8 @@ cookieController.setSSIDCookie = (req, res, next) => {
     httpOnly: true,
     maxAge: jwtExpirySeconds * 1000,
   });
-  // res.status(200).json(null);
-  next();
+  res.status(200).json(null);
+  // next();
 };
 
 module.exports = cookieController;
