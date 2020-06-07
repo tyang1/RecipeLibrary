@@ -1,7 +1,8 @@
-const jwt = require("jsonwebtoken");
+const configs = require("config");
 
-const jwtKey = "my_secret_key";
-const jwtExpirySeconds = 300;
+const jwt = require("jsonwebtoken");
+const jwtExpirySeconds = 3000000000;
+const jwtKey = configs.get("jwtKey");
 
 const signIn = {
   createJWT(userId) {

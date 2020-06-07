@@ -3,6 +3,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const config = require("config");
+const auth = require("./apis/auth");
 
 const userController = require("./controllers/userController");
 const cookieController = require("./controllers/cookieController");
@@ -12,8 +14,8 @@ const signIn = require("./helpers/singIn");
 
 const app = express();
 
-const mongoURI =
-  "mongodb+srv://recipeUser:recipe520%21@cluster0-vgvbm.mongodb.net/test?retryWrites=true&w=majority";
+const mongoURI = config.get("mongoURI");
+
 mongoose.connect(mongoURI);
 
 let db = mongoose.connection;
@@ -57,13 +59,14 @@ app.get(
   "/",
   // userController.getAllUsers,
   // cookieController.setCookie,
+  auth,
   (req, res) => {
     /**
      * Since we set `ejs` to be the view engine above, `res.render` will parse the
      * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
      * a string of proper HTML which will be sent to the client!
      */
-    res.render("index");
+    res.send("logged in!");
   }
 );
 
@@ -100,19 +103,6 @@ app.post(
 /**
  * Authorized routes
  */
-// app.get(
-//   "/secret",
-//   //   cookieController.setCookie,
-//   (req, res, next) => {
-//     res.render("./../client/secret.ejs", { error: null });
-//     // userController.getAllUsers((err, users) => {
-//     //   res.locals.users = users;
-//     //   next();
-//     // });
-//   }
-//   //   cookieController.setSSIDCookie,
-//   //   sessionController.startSession
-// );
 
 app.get("/secret", userController.getAllUsers, (err, req, res, next) => {
   let users = req.locals.users;
