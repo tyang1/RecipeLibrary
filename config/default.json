@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://recipeUser:recipe520%21@cluster0-vgvbm.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtKey": "my_secret_key"
+}

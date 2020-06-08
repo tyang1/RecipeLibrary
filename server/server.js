@@ -3,15 +3,20 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const config = require("config");
+const auth = require("./apis/auth");
 
 const userController = require("./controllers/userController");
 const cookieController = require("./controllers/cookieController");
 const sessionController = require("./controllers/sessionController");
 
+const signIn = require("./helpers/singIn");
+const profile = require("./apis/profile");
+
 const app = express();
 
-const mongoURI =
-  "mongodb+srv://recipeUser:recipe520%21@cluster0-vgvbm.mongodb.net/test?retryWrites=true&w=majority";
+const mongoURI = config.get("mongoURI");
+
 mongoose.connect(mongoURI);
 
 let db = mongoose.connection;
@@ -21,21 +26,23 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
  * Set our Express view engine as ejs.
  * This means whenever we call res.render, ejs will be used to compile the template.
  * ejs templates are located in the client/ directory
+ * Init middlewares
  */
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
+app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
 app.use("/app", express.static("public"));
-
-app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
-  res.sendFile("index.html", { root: "./public" });
-});
-
-/**
- * Automatically parse urlencoded body content from incoming requests and place it
- * in req.body
- */
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/app/home", profile);
+// app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
+//   res.sendFile("index.html", { root: "./public" });
+// });
+// app.use(express.json({ extended: false }));
 
 /**
  * --- Express Routes ---
@@ -51,34 +58,34 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.get(
   "/",
-  userController.getAllUsers,
-  cookieController.setCookie,
+  // userController.getAllUsers,
+  // cookieController.setCookie,
+  auth,
   (req, res) => {
     /**
      * Since we set `ejs` to be the view engine above, `res.render` will parse the
      * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
      * a string of proper HTML which will be sent to the client!
      */
-    res.render("index");
+    res.redirect("/app/home");
   }
 );
 
 /**
  * signup
  */
-app.use(bodyParser.json());
 app.get("/signup", (req, res) => {
-  let isError = !!req.session;
-  let err = isError ? req.session.error : null;
-  res.render("signup", { error: err });
-  if (isError) delete req.session.error;
+  // let isError = !!req.session;
+  // let err = isError ? req.session.error : null;
+  res.render("signup", { error: null });
+  // if (isError) delete req.session.error;
 });
 
 app.post(
   "/signup",
   userController.createUser,
-  cookieController.setSSIDCookie,
-  sessionController.startSession
+  cookieController.setSSIDCookie
+  // sessionController.startSession
 );
 
 /**
@@ -88,7 +95,8 @@ app.post(
   "/login",
   userController.verifyUser,
   cookieController.setSSIDCookie,
-  sessionController.isLoggedIn,
+
+  // sessionController.isLoggedIn,
   (req, res) => {
     res.sendFile("index.html", { root: "./public" });
   }
@@ -97,19 +105,6 @@ app.post(
 /**
  * Authorized routes
  */
-// app.get(
-//   "/secret",
-//   //   cookieController.setCookie,
-//   (req, res, next) => {
-//     res.render("./../client/secret.ejs", { error: null });
-//     // userController.getAllUsers((err, users) => {
-//     //   res.locals.users = users;
-//     //   next();
-//     // });
-//   }
-//   //   cookieController.setSSIDCookie,
-//   //   sessionController.startSession
-// );
 
 app.get("/secret", userController.getAllUsers, (err, req, res, next) => {
   let users = req.locals.users;

@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const bcrypt = require("bcryptjs");
 
 const userController = {};
 
@@ -22,21 +23,22 @@ userController.getAllUsers = (req, res, next) => {
   });
 };
 
-const getUserId = (req, res, userId, next) => {
+const getUserId = (req, res, userId) => {
   req.locals = {
     userId,
     toRedirect: () => res.redirect("/app/home"),
   };
-  next();
+  // next();
 };
 
 const verifyUser = (req, res, next) => {
-  User.findOne({ username: req.body.username }, (err, user) => {
+  const { username, password } = req.body;
+  User.findOne({ username }, (err, user) => {
     if (err || !user) {
       res.redirect("/signup");
-    } else if (user.password === req.body.password) {
-      // res.redirect("/secret");
-      getUserId(req, res, user._id, next);
+    } else if (bcrypt.compare(password, user.password)) {
+      getUserId(req, res, user.id);
+      next();
     }
   });
 };
@@ -45,20 +47,18 @@ const verifyUser = (req, res, next) => {
  * createUser - create and save a new User into the database.
  */
 userController.createUser = (req, res, next) => {
+  const { username, password } = req.body;
+  console.log("username", req.body);
   let newUser = new User({
-    username: req.body.username,
-    password: req.body.password,
+    username,
+    password,
   });
   newUser.save((err) => {
     if (err) {
-      // req.session = {};
-      // req.session.error = "Incorrect username or password";
       res.render("signup", { error: err });
-      // throw new Error(err);
     } else {
-      //redirect to '/secret' route
-      // res.redirect("/secret");
       verifyUser(req, res, next);
+      // res.send("user created!");
     }
   });
   // write code here
@@ -70,8 +70,8 @@ userController.createUser = (req, res, next) => {
  * against the password stored in the database.
  */
 userController.verifyUser = (req, res, next) => {
+  //here we want to add the generated jwt to the header
   verifyUser(req, res, next);
-  // write code here
 };
 
 module.exports = userController;

@@ -15,7 +15,6 @@ const userSchema = new Schema({
 userSchema.pre("save", async function (next) {
   let user = this;
   console.log("user paswrd", user);
-  // return new Promise((resolve, reject) => {
   try {
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     const hash = await bcrypt.hash(user.password, salt);
@@ -26,4 +25,13 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-module.exports = mongoose.model("User", userSchema);
+// let pwdCompare = async (plainpwdtext, hash) => {
+//   try {
+//     const res = await bcrypt.compare(plainpwdtext, hash);
+//     return res;
+//   } catch (err) {
+//     return new Error(err.message);
+//   }
+// };
+
+module.exports = User = mongoose.model("User", userSchema);

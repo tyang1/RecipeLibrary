@@ -1,3 +1,5 @@
+const signIn = require("../helpers/singIn");
+
 const userController = require("./userController");
 const cookieController = {};
 
@@ -16,10 +18,16 @@ cookieController.setCookie = (req, res, next) => {
  */
 cookieController.setSSIDCookie = (req, res, next) => {
   // write code here
-  // let { userId, toRedirect } = userController.getUserId();
   let { userId, toRedirect } = req.locals;
-  res.cookie("ssid", userId, { httpOnly: true });
-  next();
+  //can you pass req and res around?
+  const { token, jwtExpirySeconds } = signIn.createJWT(userId);
+  res.json({ token });
+  // res.cookie("ssid", token, {
+  //   httpOnly: true,
+  // maxAge: jwtExpirySeconds * 1000000,
+  // });
+  // res.status(200).json(null);
+  // next();
 };
 
 module.exports = cookieController;
