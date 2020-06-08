@@ -3,25 +3,30 @@ const Schema = mongoose.Schema;
 const Recipe = require("./recipeModel");
 
 const profileSchema = new Schema({
-  profileId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "user",
   },
   myTop3Recipes: {
-    type: [Recipe],
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Recipe",
   },
   newsfeed: {
     author: {
       type: String,
     },
     top3Recieps: {
-      type: [Recipe],
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Recipe",
     },
   },
   diet: {
     type: [String],
   },
   recommendedRecipes: {
-    type: [Recipe],
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Recipe",
   },
 });
+
+module.exports = Profile = mongoose.model("Profile", profileSchema);
