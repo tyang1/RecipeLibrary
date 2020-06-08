@@ -38,7 +38,7 @@ app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
 app.use("/app", express.static("public"));
-app.use("/app/home", profile);
+app.use("/app/home/me", profile);
 // app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
 //   res.sendFile("index.html", { root: "./public" });
 // });

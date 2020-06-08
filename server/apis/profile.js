@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const request = require("request");
 const Profile = require("../models/profileModel");
 const auth = require("../apis/auth");
 const { check, validationResult } = require("express-validator/check");
@@ -70,7 +71,7 @@ router.post(
           { $set: profileFields },
           { new: true }
         );
-        res.json({ update: profile });
+        res.json({ update: profileFields });
       } else {
         profile = new Profile(profileFields);
         await profile.save();
@@ -82,5 +83,33 @@ router.post(
     }
   }
 );
+
+//@route GET /app/home/me/recommended_recipes
+//@desc GET current users's recommended recipes
+//@access Public
+
+router.get("/recommended_recipes?diet={str1}&nutrition={str2}", (req, res) => {
+  try {
+    //get the food API payloads, random 3
+    const options = {
+      url: `https://api.spoonacular.com/recipes/search?query=${req.query.diet}${req.query.nutrition}&number=3`,
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    request(options, (err, response, body) => {
+      if (err) {
+        console.error(err);
+      }
+      if (response.statusCode !== 200) {
+        res.status(404).json({ msg: "Recipe not found" });
+      }
+      res.json(JSON.parse(body));
+    });
+    //payload :{nutrition, ingredients, img}
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
 
 module.exports = router;
