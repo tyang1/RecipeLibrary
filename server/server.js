@@ -11,6 +11,7 @@ const cookieController = require("./controllers/cookieController");
 const sessionController = require("./controllers/sessionController");
 
 const signIn = require("./helpers/singIn");
+const profile = require("./apis/profile");
 
 const app = express();
 
@@ -27,14 +28,6 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
  * ejs templates are located in the client/ directory
  * Init middlewares
  */
-app.set("view engine", "ejs");
-app.set("views", path.resolve(__dirname, "../client"));
-app.use("/app", express.static("public"));
-app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
-  res.sendFile("index.html", { root: "./public" });
-});
-// app.use(express.json({ extended: false }));
-
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -42,6 +35,14 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.set("view engine", "ejs");
+app.set("views", path.resolve(__dirname, "../client"));
+app.use("/app", express.static("public"));
+app.use("/app/home", profile);
+// app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
+//   res.sendFile("index.html", { root: "./public" });
+// });
+// app.use(express.json({ extended: false }));
 
 /**
  * --- Express Routes ---
@@ -66,7 +67,7 @@ app.get(
      * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
      * a string of proper HTML which will be sent to the client!
      */
-    res.send("logged in!");
+    res.redirect("/app/home");
   }
 );
 
@@ -74,10 +75,10 @@ app.get(
  * signup
  */
 app.get("/signup", (req, res) => {
-  let isError = !!req.session;
-  let err = isError ? req.session.error : null;
-  res.render("signup", { error: err });
-  if (isError) delete req.session.error;
+  // let isError = !!req.session;
+  // let err = isError ? req.session.error : null;
+  res.render("signup", { error: null });
+  // if (isError) delete req.session.error;
 });
 
 app.post(
@@ -94,7 +95,8 @@ app.post(
   "/login",
   userController.verifyUser,
   cookieController.setSSIDCookie,
-  sessionController.isLoggedIn,
+
+  // sessionController.isLoggedIn,
   (req, res) => {
     res.sendFile("index.html", { root: "./public" });
   }

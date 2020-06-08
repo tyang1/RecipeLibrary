@@ -53,23 +53,23 @@ describe("Unit 11 Test", () => {
       // });
     });
   });
+  describe("Bcrypting password tests", () => {
+    it("user created password is hashed before saving to db", (done) => {
+      request
+        .post("/signup")
+        .send({ username: "test123", password: "test456" })
+        .type("form")
+        .end((err, res) => {
+          User.findOne({ username: test.username }, (err, user) => {
+            expect(err).to.be.null;
+            expect(user).to.not.be.null;
+            expect(user.password).to.not.equal(test.password);
+            done();
+          });
+        });
+    });
+  });
 });
-// xdescribe("Bcrypting password tests", () => {
-//   xit("user created password is hashed before saving to db", (done) => {
-//     request
-//       .post("/signup")
-//       .send({ username: "test123", password: "test456" })
-//       .type("form")
-//       .end((err, res) => {
-//         User.findOne({ username: test.username }, (err, user) => {
-//           expect(err).to.be.null;
-//           expect(user).to.not.be.null;
-//           expect(user.password).to.not.equal(test.password);
-//           done();
-//         });
-//       });
-//   });
-// });
 
 // describe("Unit 10 Tests", () => {
 //   let id;

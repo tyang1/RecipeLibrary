@@ -70,8 +70,8 @@ userController.createUser = (req, res, next) => {
  * against the password stored in the database.
  */
 userController.verifyUser = (req, res, next) => {
+  //here we want to add the generated jwt to the header
   verifyUser(req, res, next);
-  // write code here
 };
 
 module.exports = userController;

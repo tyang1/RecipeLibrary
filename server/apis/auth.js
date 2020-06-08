@@ -1,11 +1,16 @@
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
+//@route POST /login
+//@desc Authenticate user, and get token
+//@access PUBLIC
+
 module.exports = function (req, res, next) {
   //get the token from the header
   const token = req.header("x-auth-token");
   if (!token) {
-    return res.status(401).json({ msg: "Token does not exist, auth denied" });
+    return res.render("index");
+    // return res.status(401).json({ msg: "Token does not exist, auth denied" });
   }
   try {
     let decoded = jwt.verify(token, config.get("jwtKey"));
