@@ -7,18 +7,18 @@ const Profile = require("../models/profileModel");
 const auth = require("../apis/auth");
 const { check, validationResult } = require("express-validator/check");
 
-//@route GET /app/home
+//@route GET /app/home/me
 //@desc GET current users's profile
 //@access Private
 router.get("/", auth, async (req, res) => {
   try {
     let { userId } = req.user;
-    let profile = await Profile.findOne({ user: userId }).populate("user");
-    console.log("req.user", profile);
+    let profile = await Profile.findOne({ user: userId });
     if (!profile) {
       res.status(400).json({ msg: "No profile found" });
     } else {
-      res.send(profile);
+      // res.send(profile);
+      res.sendFile("index.html", { root: "./public" });
     }
   } catch (err) {
     res.status(500).send("Server error");
@@ -73,7 +73,7 @@ router.get("/", auth, async (req, res) => {
 //   }
 // });
 
-//@route POST /app/home
+//@route POST /app/home/me
 //@desc CREATE/UPDATE current users's profile
 //@access Private
 
