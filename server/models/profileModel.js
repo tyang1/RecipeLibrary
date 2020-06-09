@@ -2,6 +2,21 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Recipe = require("./recipeModel");
 
+const recipeSchema = new Schema({
+  title: {
+    type: String,
+  },
+  readyInMinutes: {
+    type: Number,
+  },
+  sourceUrl: {
+    type: String,
+  },
+  image: {
+    type: String,
+  },
+});
+
 const profileSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -24,13 +39,18 @@ const profileSchema = new Schema({
     },
   },
   diet: {
-    type: [String],
+    nutrition: {
+      type: [String],
+    },
+    ingredients: {
+      type: [String],
+    },
   },
   recommendedRecipes: {
     // type: [mongoose.Schema.Types.ObjectId],
     // ref: "Recipe",
-    type: [String],
-    required: true,
+    type: [recipeSchema],
+    // required: true,
   },
 });
 
