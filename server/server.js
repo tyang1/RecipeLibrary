@@ -37,7 +37,7 @@ app.use(
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
-app.use("/app", express.static("public"));
+app.use("/app/home/me", express.static("public"));
 app.use("/app/home/me", profile);
 
 /**

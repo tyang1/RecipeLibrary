@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const path = require("path");
 const axios = require("axios");
 const request = require("request");
 const config = require("config");
@@ -10,16 +11,19 @@ const { check, validationResult } = require("express-validator/check");
 //@route GET /app/home/me
 //@desc GET current users's profile
 //@access Private
-router.get("/", auth, async (req, res) => {
+// router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    let { userId } = req.user;
-    let profile = await Profile.findOne({ user: userId });
-    if (!profile) {
-      res.status(400).json({ msg: "No profile found" });
-    } else {
-      // res.send(profile);
-      res.sendFile("index.html", { root: "./public" });
-    }
+    res.sendFile("index.html", { root: path.join(__dirname, "../../public") });
+    //TODO: restore the following:
+    // let { userId } = req.user;
+    // let profile = await Profile.findOne({ user: userId });
+    // if (!profile) {
+    //   res.status(400).json({ msg: "No profile found" });
+    // } else {
+    //   // res.send(profile);
+    //    res.sendFile("index.html", { root: path.join(__dirname, "../../public") });
+    // }
   } catch (err) {
     res.status(500).send("Server error");
   }

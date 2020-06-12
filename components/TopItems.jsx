@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function paperContent(value) {
-  let content = (value && value.img) || null;
+  let content = (value && value.title) || null;
   return <div>{content}</div>;
 }
 function numberToPaper({ number, title, classes, selectHandler, value }) {

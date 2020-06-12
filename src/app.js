@@ -5,16 +5,18 @@ import Content from "../components/Content.jsx";
 import ResponsiveLayout from "../components/ResponsiveLayout.jsx";
 import RecipeTags from "../components/RecipeTags.jsx";
 // import API from "../API/API.js";
-import store from "../stores/appStores.js";
+import { store } from "../stores/appStores.js";
+import { loadRecipes } from "../stores/appStores";
 import { Provider } from "react-redux";
 
 //ContentView components
 import MyRecipe from "../components/MyRecipe.jsx";
 
 export default function App() {
-  // useEffect(() => {
-  //   API.fetchLoggedInState();
-  // }, []);
+  useEffect(() => {
+    // API.fetchLoggedInState();
+    store.dispatch(loadRecipes());
+  }, []);
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -22,7 +24,7 @@ export default function App() {
   const contentView = {
     0: <MyRecipe />,
     1: <h2>Hello Recipe Library</h2>,
-    2: <RecipeTags/>
+    2: <RecipeTags />,
   };
   const renderDesktop = () => {
     return (

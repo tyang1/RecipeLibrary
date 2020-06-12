@@ -1,11 +1,11 @@
-const app = require("./../server/server");
+const app = require("../server");
 const request = require("supertest")(app);
 const expect = require("chai").expect;
-const Session = require("./../server/models/sessionModel");
-const User = require("./../server/models/userModel");
+const Session = require("../models/sessionModel");
+const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const sinon = require("sinon");
-const signIn = require("../server/helpers/singIn");
+const signIn = require("../helpers/singIn");
 
 let test = {
   username: "test123",

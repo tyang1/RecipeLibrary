@@ -18,12 +18,12 @@ cookieController.setCookie = (req, res, next) => {
  */
 cookieController.setSSIDCookie = (req, res, next) => {
   // write code here
-  let { userId, toRedirect } = req.locals;
+  let { userId } = req.locals;
   //can you pass req and res around?
   const { token } = signIn.createJWT(userId);
-  req.headers["x-auth-token"] = token;
-  // next();
-  res.json({ token });
+  res.set("x-auth-token", token);
+  next();
+  // res.json({ token });
 };
 
 module.exports = cookieController;

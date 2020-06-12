@@ -1,0 +1,9 @@
+export const REFRESH_RECIPES = "REFRESH_RECIPES";
+export const ADD_RECIPE = "ADD_RECIPE";
+export const REMOVE_RECIPE = "REMOVE_RECIPE";
+
+export const LOADING_DATA = "LOADING_DATA";
+
+export const ADD_CATEGORY = "ADD_CATEGORY";
+export const ADD_NUTRITION = "ADD_NUTRITION";
+export const EDIT_NUTRITION = "EDIT_NUTRITION";

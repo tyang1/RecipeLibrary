@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import TopItems from "./TopItems.jsx";
 
 function RecipeItems({ top3Recipes, recentRecipes }) {
+  console.log("recipeItems", top3Recipes);
   const [value, setValue] = React.useState({ top3Recipes, recentRecipes });
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -11,16 +12,16 @@ function RecipeItems({ top3Recipes, recentRecipes }) {
   return (
     <div>
       <TopItems
-        value={{ ...top3Recipes }}
-        selectHandler={handleChange}
-        number={3}
-        title="Recently Viewed Recipes"
-      />
-      <TopItems
-        value={{ ...recentRecipes }}
+        value={top3Recipes}
         selectHandler={handleChange}
         number={3}
         title="Most Popular Recipes"
+      />
+      <TopItems
+        value={recentRecipes}
+        selectHandler={handleChange}
+        number={3}
+        title="Recently Viewed Recipes"
       />
     </div>
   );
