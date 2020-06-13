@@ -22,8 +22,9 @@ cookieController.setSSIDCookie = (req, res, next) => {
   //can you pass req and res around?
   const { token } = signIn.createJWT(userId);
   res.set("x-auth-token", token);
-  next();
-  // res.json({ token });
+  //TODO: to enable next()
+  // next();
+  res.json({ token });
 };
 
 module.exports = cookieController;

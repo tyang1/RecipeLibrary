@@ -6,13 +6,17 @@ const mongoose = require("mongoose");
 const config = require("config");
 const auth = require("./apis/auth");
 
+//Controllers:
 const userController = require("./controllers/userController");
 const cookieController = require("./controllers/cookieController");
 const sessionController = require("./controllers/sessionController");
 
+//helper utilies:
 const signIn = require("./helpers/singIn");
-const profile = require("./apis/profile");
 
+//app routes
+const profile = require("./apis/profile");
+const recipes = require("./apis/recipes");
 const app = express();
 
 const mongoURI = config.get("mongoURI");
@@ -37,8 +41,8 @@ app.use(
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
-app.use("/app/home/me", express.static("public"));
 app.use("/app/home/me", profile);
+app.use("/app/home/me", express.static("public"));
 
 /**
  * --- Express Routes ---
@@ -97,6 +101,8 @@ app.post(
 /**
  * Authorized routes
  */
+
+app.use("/recipes", recipes);
 
 app.listen(3000);
 

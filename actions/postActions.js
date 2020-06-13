@@ -1,4 +1,4 @@
-export default ServerActions = {
+export default PostActions = {
   //   recieveLoggedInState(state) {
   //     //dispatch the action and payload to store
   //     return state;

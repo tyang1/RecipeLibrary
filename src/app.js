@@ -4,17 +4,14 @@ import RecipeMenu from "../components/AppBar.jsx";
 import Content from "../components/Content.jsx";
 import ResponsiveLayout from "../components/ResponsiveLayout.jsx";
 import RecipeTags from "../components/RecipeTags.jsx";
-// import API from "../API/API.js";
 import { store } from "../stores/appStores.js";
-import { loadRecipes } from "../stores/appStores";
 import { Provider } from "react-redux";
-
+import { loadRecipes } from "../actions/actionCreators";
 //ContentView components
 import MyRecipe from "../components/MyRecipe.jsx";
 
 export default function App() {
   useEffect(() => {
-    // API.fetchLoggedInState();
     store.dispatch(loadRecipes());
   }, []);
   const [value, setValue] = React.useState(0);
