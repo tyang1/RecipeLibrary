@@ -5,6 +5,10 @@ const Profile = require("../models/profileModel");
 const { check, validationResult } = require("express-validator/check");
 const auth = require("../apis/auth");
 
+//@route GET /app/home/me/recipes
+//@desc GET recommended recipes
+//@access PRIVATE
+
 //TODO, add auth here as well
 router.get("/", auth, async (req, res) => {
   //   const userId = req.params.uid;

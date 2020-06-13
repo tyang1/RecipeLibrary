@@ -7,13 +7,14 @@ import fetch from "cross-fetch";
 export function loadRecipes() {
   //call the server API to fetch the top3Recipes
   return (dispatch) => {
-    return fetch(`http://localhost:3000/app/home/me/recipes`)
-      .then((response) => response.json())
-      .then((data) =>
-        dispatch({
+    const res = await fetch(`http://localhost:3000/app/home/me/recipes`);
+    if (res.status >= 400) {
+      throw new Error("Bad response from server");
+    }
+    let data = await res.json();
+    dispatch({
           type: LOADING_DATA,
           payload: data[0].recommendedRecipes,
-        })
-      );
+        }
   };
 }

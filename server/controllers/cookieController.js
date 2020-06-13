@@ -21,10 +21,19 @@ cookieController.setSSIDCookie = (req, res, next) => {
   let { userId } = req.locals;
   //can you pass req and res around?
   const { token } = signIn.createJWT(userId);
-  res.set("x-auth-token", token);
+
+  res.cookie("access_token", token, {
+    expires: new Date(Date.now() + 8 * 36000000000), // cookie will be removed after 8 hours
+    httpOnly: true,
+  });
+  // .redirect(301, '/admin')
+  next();
+
   //TODO: to enable next()
   // next();
-  res.json({ token });
+  //TODO: remove below
+  // res.set("x-auth-token", token);
+  // res.json({ token });
 };
 
 module.exports = cookieController;

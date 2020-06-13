@@ -2,13 +2,14 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 
 //@route POST /login
-//@desc Authenticate user, and get token
+//@desc Authenticate user, verify token, and return userID
 //@access PUBLIC
 
 module.exports = function (req, res, next) {
   //get the token from the header
   console.log("auth", req.header("x-auth-token"));
-  const token = req.header("x-auth-token");
+  console.log("cookies auth", req.cookies["access_token"]);
+  const token = req.header("x-auth-token") || req.cookies["access_token"];
   if (!token) {
     return res.render("index");
     // return res.status(401).json({ msg: "Token does not exist, auth denied" });

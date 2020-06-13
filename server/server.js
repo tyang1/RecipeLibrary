@@ -39,10 +39,11 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
+app.use("/app/home", express.static("public"));
 app.use("/app/home/me", profile);
-app.use("/app/home/me", express.static("public"));
 app.use("/app/home/me/recipes", recipes);
 
 /**
@@ -56,7 +57,6 @@ app.use("/app/home/me/recipes", recipes);
 /**
  * root
  */
-app.use(cookieParser());
 app.get("/", auth, (req, res) => {
   /**
    * Since we set `ejs` to be the view engine above, `res.render` will parse the
@@ -81,7 +81,7 @@ app.post(
   userController.createUser,
   cookieController.setSSIDCookie,
   (req, res) => {
-    res.redirect("/app/home/me");
+    res.redirect("/app/home");
   }
   // sessionController.startSession
 );
