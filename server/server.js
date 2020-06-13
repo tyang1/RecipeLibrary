@@ -43,6 +43,7 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
 app.use("/app/home/me", profile);
 app.use("/app/home/me", express.static("public"));
+app.use("/app/home/me/recipes", recipes);
 
 /**
  * --- Express Routes ---
@@ -101,8 +102,6 @@ app.post(
 /**
  * Authorized routes
  */
-
-app.use("/recipes", recipes);
 
 app.listen(3000);
 
