@@ -8,7 +8,8 @@
     "build": "webpack --mode=production --watch",
     "dev-server": "webpack-dev-server",
     "start": "nodemon server/server.js",
-    "test": "export NODE_ENV=test && mocha ./server/test"
+    "test": "export NODE_ENV=test && mocha ./server/test",
+    "store-test": "babel-tape-runner \"lib/**/__tests__/*-test.js\" "
   },
   "author": "",
   "license": "ISC",

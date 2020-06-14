@@ -6,9 +6,9 @@ export const monitorReducerEnhancer = (createStore) => (
   enhancer
 ) => {
   const monitorEnhancer = (state, action) => {
-    const start = performance.now();
+    const start = typeof performance !== "undefined" && performance.now();
     const newState = reducer(state, action);
-    const end = performance.now();
+    const end = typeof performance !== "undefined" && performance.now();
     const diff = round(end - start);
 
     console.log("reducer process time:", diff);

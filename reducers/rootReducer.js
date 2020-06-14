@@ -1,8 +1,20 @@
-import { LOADING_DATA, AUTH_SUCCESS, TOKEN_SUCCESS } from "../actions/types";
+import {
+  LOADING_DATA,
+  GET_RECOMMENDED,
+  AUTH_SUCCESS,
+  TOKEN_SUCCESS,
+} from "../actions/types";
+
+function getStorageItem(item) {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem(item);
+  }
+  return null;
+}
 
 const defaultState = {
   isLoading: true,
-  token: localStorage.getItem("token"),
+  token: getStorageItem("token"),
   isAuthenticated: false,
   top3Recipes: [],
   recentRecipes: [],
@@ -11,10 +23,11 @@ const defaultState = {
 export function appReducer(state = defaultState, action = {}) {
   const { type, payload } = action;
   switch (type) {
-    case LOADING_DATA:
+    case GET_RECOMMENDED:
       return {
         ...state,
-        top3Recipes: payload,
+        recentRecipes: payload,
+        isLoading: false,
       };
     case TOKEN_SUCCESS:
       return {
