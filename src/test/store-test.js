@@ -1,7 +1,7 @@
 const test = require("tape");
-const { configureStore } = require("../stores/configureStore");
-const { appReducer } = require("../reducers/rootReducer");
-const { loadRecipes } = require("../actions/user/api");
+const { configureStore } = require("../../stores/configureStore");
+const { appReducer } = require("../../reducers/rootReducer");
+const { loadRecipes } = require("../../actions/user/api");
 
 const pipe = require("lodash/fp/pipe");
 
