@@ -63,7 +63,7 @@ router.get("/", auth, async (req, res) => {
     let { userId } = req.user;
     let profile = await Profile.findOne({ user: userId });
     if (profile) {
-      res.send(profile);
+      res.status(200).send(profile);
     } else {
       const profileFields = await createProfileFields(userId, {});
       //create profile

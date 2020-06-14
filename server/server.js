@@ -63,7 +63,7 @@ app.get("/", auth, (req, res) => {
    * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
    * a string of proper HTML which will be sent to the client!
    */
-  res.redirect("/app/home/me");
+  res.redirect("/app/home");
 });
 
 /**
