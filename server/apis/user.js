@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const config = require("config");
+const express = require("express");
+const router = express.Router();
 
-//@route POST /login
+//@route GET /app/home/me
 //@desc Authenticate user, verify token, and return userID
 //@access PUBLIC
 
@@ -15,9 +15,7 @@ module.exports = function (req, res, next) {
     // return res.status(401).json({ msg: "Token does not exist, auth denied" });
   }
   try {
-    let decoded = jwt.verify(token, config.get("jwtKey"));
-    req.user = decoded;
-    next();
+    res.json({ token });
   } catch (err) {
     console.error(err);
     res.status(401).json({ msg: "Token is not valid" });

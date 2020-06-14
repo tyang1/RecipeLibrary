@@ -1,4 +1,5 @@
 {
   "mongoURI": "mongodb+srv://recipeUser:recipe520%21@cluster0-vgvbm.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtKey": "my_secret_key"
+  "jwtKey": "my_secret_key",
+  "foodAPIKey": "6790bdf5e8284a9a98b7fd388f1001c9"
 }

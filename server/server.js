@@ -6,13 +6,18 @@ const mongoose = require("mongoose");
 const config = require("config");
 const auth = require("./apis/auth");
 
+//Controllers:
 const userController = require("./controllers/userController");
 const cookieController = require("./controllers/cookieController");
 const sessionController = require("./controllers/sessionController");
 
+//helper utilies:
 const signIn = require("./helpers/singIn");
-const profile = require("./apis/profile");
 
+//app routes
+const profile = require("./apis/profile");
+const recipes = require("./apis/recipes");
+const user = require("./apis/user");
 const app = express();
 
 const mongoURI = config.get("mongoURI");
@@ -35,14 +40,13 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
-app.use("/app", express.static("public"));
-app.use("/app/home", profile);
-// app.get("/app/home", sessionController.isLoggedIn, (req, res) => {
-//   res.sendFile("index.html", { root: "./public" });
-// });
-// app.use(express.json({ extended: false }));
+app.use("/app/home/me", user);
+app.use("/app/home", express.static("public"));
+app.use("/app/home/me/profile", profile);
+app.use("/app/home/me/recipes", recipes);
 
 /**
  * --- Express Routes ---
@@ -55,21 +59,14 @@ app.use("/app/home", profile);
 /**
  * root
  */
-app.use(cookieParser());
-app.get(
-  "/",
-  // userController.getAllUsers,
-  // cookieController.setCookie,
-  auth,
-  (req, res) => {
-    /**
-     * Since we set `ejs` to be the view engine above, `res.render` will parse the
-     * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
-     * a string of proper HTML which will be sent to the client!
-     */
-    res.redirect("/app/home");
-  }
-);
+app.get("/", auth, (req, res) => {
+  /**
+   * Since we set `ejs` to be the view engine above, `res.render` will parse the
+   * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
+   * a string of proper HTML which will be sent to the client!
+   */
+  res.redirect("/app/home");
+});
 
 /**
  * signup
@@ -84,7 +81,11 @@ app.get("/signup", (req, res) => {
 app.post(
   "/signup",
   userController.createUser,
-  cookieController.setSSIDCookie
+  cookieController.setSSIDCookie,
+  (req, res) => {
+    const { token } = req.locals;
+    res.redirect("/app/home");
+  }
   // sessionController.startSession
 );
 
@@ -95,7 +96,6 @@ app.post(
   "/login",
   userController.verifyUser,
   cookieController.setSSIDCookie,
-
   // sessionController.isLoggedIn,
   (req, res) => {
     res.sendFile("index.html", { root: "./public" });
@@ -105,12 +105,6 @@ app.post(
 /**
  * Authorized routes
  */
-
-app.get("/secret", userController.getAllUsers, (err, req, res, next) => {
-  let users = req.locals.users;
-  res.render("secret", { users: users });
-  next();
-});
 
 app.listen(3000);
 

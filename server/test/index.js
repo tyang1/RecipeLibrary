@@ -1,76 +1,183 @@
-const app = require("./../server/server");
+const app = require("../server");
 const request = require("supertest")(app);
 const expect = require("chai").expect;
-const Session = require("./../server/models/sessionModel");
-const User = require("./../server/models/userModel");
+const Session = require("../models/sessionModel");
+const User = require("../models/userModel");
+const Profile = require("../models/profileModel");
 const bcrypt = require("bcryptjs");
 const sinon = require("sinon");
-const signIn = require("../server/helpers/singIn");
+const signIn = require("../helpers/singIn");
 
 let test = {
   username: "test123",
   password: "test456",
 };
+let token = null;
 
-describe("Unit 11 Test", () => {
+describe("My Recipe Test", () => {
   beforeEach((done) => {
-    User.remove({}, () => {
-      Session.remove({}, () => {
-        User.create(
-          {
-            username: "david",
-            password: "aight",
-          },
-          (err, user) => {
-            id = user.id;
-          }
-        );
-        User.remove({ username: "test123" }, (err, data) => {
-          if (err) {
-            console.log("err in deleting user test", err);
-            done(err);
-          } else {
-            console.log("successfully delete user test");
-          }
+    User.create({ username: "david", password: "aight" }, (err, user) => {});
+    User.remove({ username: "test123" }, (err, data) => {
+      if (err) {
+        console.log("err removing the user", err);
+        done(err);
+      } else {
+        console.log("successfully removed the user");
+        //TODO:
+        //have to remove the profile as well
+        done();
+      }
+    });
+  });
+  it("POST request to /signin with correctly formatted body creates a user", (done) => {
+    request
+      .post("/signup")
+      .send(test)
+      .type("form")
+      .end((err, res) => {
+        User.findOne({ username: test.username }, (err, user) => {
+          expect(err).to.be.null;
+          expect(user).to.not.be.null;
           done();
         });
       });
-    });
   });
-  describe("JWT Auth", () => {
-    it("the user signs in have valid JWT token", (done) => {
-      request
-        .post("/signup")
-        .type("form")
-        .send({ username: "test123", password: "test456" })
-        .expect("set-cookie", /ssid=/, done);
-      // .end((err, res) => {
-      // console.log("res.headers", res.headers);
-      // let token = getCookieValue(res.headers["set-cookie"], "ssid");
-      // console.log("token intest", token);
-      // expect(signIn.verifyJWT(token)).to.be.true;
-      // done();
-      // });
-    });
-  });
-  describe("Bcrypting password tests", () => {
-    it("user created password is hashed before saving to db", (done) => {
-      request
-        .post("/signup")
-        .send({ username: "test123", password: "test456" })
-        .type("form")
-        .end((err, res) => {
-          User.findOne({ username: test.username }, (err, user) => {
-            expect(err).to.be.null;
-            expect(user).to.not.be.null;
-            expect(user.password).to.not.equal(test.password);
-            done();
-          });
+  it("POST request to /signin with incorrectly formatted body should not create new user", (done) => {
+    request
+      .post("/signup")
+      .send({ username: "test123" })
+      .type("form")
+      .end((err, res) => {
+        User.findOne({ username: test.username }, (err, user) => {
+          expect(user).to.not.exist;
+          done();
         });
-    });
+      });
   });
+  it("POST requet to /signin with incorrectly formatted body redirected to /sign in with err", (done) => {
+    request
+      .post("/signup")
+      .send({ username: "test123" })
+      .type("form")
+      .end((err, res) => {
+        expect(res.text.match(/Error/)).to.not.be.null;
+        done();
+      });
+  });
+  it("POST request to /signin with existing user should not create new user", (done) => {
+    request
+      .post("./signup")
+      .send({ username: "david", password: "aight" })
+      .type("form")
+      .end((err, res) => {
+        User.find({ username: "david" }, (err, users) => {
+          expect(users.length).to.equal(1);
+          done();
+        });
+      });
+  });
+
+  // it("POST request to /login with incorrectly formatted body redirects to /");
+  // it("POST request to /login with incorrect password get redirected to /");
+  // it("POST request to /login with incorrect username get redirected to /");
+  // it("POST request to /login with existing user redirected to /app/home");
+
+  it("POST request to /app/home/me with incorrectly formatted body does not update profile", (done) => {
+    request
+      .post("/signup")
+      .send(test)
+      .type("form")
+      .end((err, res) => {
+        let token = getCookieValue(res.headers["set-cookie"], "auth_token");
+        request
+          .post("/app/home/me")
+          .set("x-auth-token", token)
+          .send({ diet: null })
+          .expect(400, done);
+      });
+  });
+
+  it("GET request to /app/home/me always gets valid profile", (done) => {
+    request
+      .post("/signup")
+      .send(test)
+      .type("form")
+      .end((err, res) => {
+        let token = getCookieValue(res.headers["set-cookie"], "auth_token");
+        request
+          .get("/app/home/me")
+          .set("x-auth-token", token)
+          .end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.not.be.null;
+            done();
+            //TODO: look up profile model
+          });
+      });
+  });
+  it("unauth user will get redirected to login/sign on");
 });
 
+// describe("Unit 11 Test", () => {
+//   beforeEach((done) => {
+//     User.remove({}, () => {
+//       Session.remove({}, () => {
+//         User.create(
+//           {
+//             username: "david",
+//             password: "aight",
+//           },
+//           (err, user) => {
+//             id = user.id;
+//           }
+//         );
+//         User.remove({ username: "test123" }, (err, data) => {
+//           if (err) {
+//             console.log("err in deleting user test", err);
+//             done(err);
+//           } else {
+//             console.log("successfully delete user test");
+//           }
+//           done();
+//         });
+//       });
+//     });
+//   });
+//   describe("JWT Auth", () => {
+//     it("the user signs in have valid JWT token", (done) => {
+//       request
+//         .post("/signup")
+//         .type("form")
+//         .send({ username: "test123", password: "test456" })
+//         .expect("set-cookie", /ssid=/, done);
+//       // .end((err, res) => {
+//       // console.log("res.headers", res.headers);
+//       // let token = getCookieValue(res.headers["set-cookie"], "ssid");
+//       // console.log("token intest", token);
+//       // expect(signIn.verifyJWT(token)).to.be.true;
+//       // done();
+//       // });
+//     });
+//   });
+//   describe("Bcrypting password tests", () => {
+//     it("user created password is hashed before saving to db", (done) => {
+//       request
+//         .post("/signup")
+//         .send({ username: "test123", password: "test456" })
+//         .type("form")
+//         .end((err, res) => {
+//           User.findOne({ username: test.username }, (err, user) => {
+//             expect(err).to.be.null;
+//             expect(user).to.not.be.null;
+//             expect(user.password).to.not.equal(test.password);
+//             done();
+//           });
+//         });
+//     });
+//   });
+// });
+
+//OLD UNIT TEST:
 // describe("Unit 10 Tests", () => {
 //   let id;
 //   let clock;
