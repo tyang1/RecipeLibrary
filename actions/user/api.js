@@ -1,4 +1,4 @@
-import { LOADING_DATA } from "../types";
+import { LOADING_DATA, GET_RECOMMENDED } from "../types";
 import { recipeMocks } from "../../mock/recipes";
 import fetch from "cross-fetch";
 
@@ -17,4 +17,10 @@ export function loadRecipes() {
   //         payload: data[0].recommendedRecipes,
   //       }
   // };
+  return (dispatch) => {
+    dispatch({
+      type: GET_RECOMMENDED,
+      payload: recipeMocks.recentRecipes,
+    });
+  };
 }

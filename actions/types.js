@@ -1,6 +1,7 @@
 export const REFRESH_RECIPES = "REFRESH_RECIPES";
 export const ADD_RECIPE = "ADD_RECIPE";
 export const REMOVE_RECIPE = "REMOVE_RECIPE";
+export const GET_RECOMMENDED = "GET_RECOMMENDED";
 
 export const LOADING_DATA = "LOADING_DATA";
 
