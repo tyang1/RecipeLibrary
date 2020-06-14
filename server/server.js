@@ -17,6 +17,7 @@ const signIn = require("./helpers/singIn");
 //app routes
 const profile = require("./apis/profile");
 const recipes = require("./apis/recipes");
+const user = require("./apis/user");
 const app = express();
 
 const mongoURI = config.get("mongoURI");
@@ -42,8 +43,9 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
+app.use("/app/home/me", user);
 app.use("/app/home", express.static("public"));
-app.use("/app/home/me", profile);
+app.use("/app/home/me/profile", profile);
 app.use("/app/home/me/recipes", recipes);
 
 /**
@@ -81,6 +83,7 @@ app.post(
   userController.createUser,
   cookieController.setSSIDCookie,
   (req, res) => {
+    const { token } = req.locals;
     res.redirect("/app/home");
   }
   // sessionController.startSession

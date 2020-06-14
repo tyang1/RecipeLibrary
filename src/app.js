@@ -4,15 +4,18 @@ import RecipeMenu from "../components/AppBar.jsx";
 import Content from "../components/Content.jsx";
 import ResponsiveLayout from "../components/ResponsiveLayout.jsx";
 import RecipeTags from "../components/RecipeTags.jsx";
-import { store } from "../stores/appStores.js";
 import { Provider } from "react-redux";
-import { loadRecipes } from "../actions/actionCreators";
+// import { loadRecipes } from "../actions/user/api";
+import { setAuth } from "../actions/auth/api";
+import { configureStore } from "../stores/configureStore";
 //ContentView components
 import MyRecipe from "../components/MyRecipe.jsx";
 
+export const store = configureStore();
+
 export default function App() {
-  useEffect(() => {
-    store.dispatch(loadRecipes());
+  useEffect(async () => {
+    store.dispatch(setAuth());
   }, []);
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -32,14 +35,26 @@ export default function App() {
     );
   };
   return (
-    <Provider store={store}>
-      <ResponsiveLayout
-        renderDesktop={renderDesktop}
-        breakpoint={false}
-        renderMobile={() => null}
-      />
-    </Provider>
+    <ResponsiveLayout
+      renderDesktop={renderDesktop}
+      breakpoint={false}
+      renderMobile={() => null}
+    />
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+function renderApp() {
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById("root")
+  );
+}
+
+//module.hot.accept(param1: module to be hot reloaded, param2: what needs to happen)
+if (process.env.NODE_ENV !== "production" && module.hot) {
+  module.hot.accept("../components/ResponsiveLayout", renderApp);
+}
+
+renderApp();

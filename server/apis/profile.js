@@ -52,7 +52,7 @@ async function createProfileFields(userId, req = {}) {
   return profileFields;
 }
 
-//@route GET /app/home/me
+//@route GET /app/home/me/profile
 //@desc GET current users's profile
 //@access Private
 // router.get("/", auth, async (req, res) => {

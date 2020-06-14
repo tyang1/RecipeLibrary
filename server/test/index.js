@@ -111,6 +111,7 @@ describe("My Recipe Test", () => {
             expect(err).to.be.null;
             expect(res).to.not.be.null;
             done();
+            //TODO: look up profile model
           });
       });
   });

@@ -7,3 +7,6 @@ export const LOADING_DATA = "LOADING_DATA";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const ADD_NUTRITION = "ADD_NUTRITION";
 export const EDIT_NUTRITION = "EDIT_NUTRITION";
+
+export const AUTH_SUCCESS = "AUTH_SUCCESS";
+export const TOKEN_SUCCESS = "TOKEN_SUCCESS";
