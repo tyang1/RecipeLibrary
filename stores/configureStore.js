@@ -3,11 +3,8 @@ import thunkMiddleware from "redux-thunk";
 import { logger } from "../middleware/logger";
 import { monitorReducerEnhancer } from "../enhancers/monitorReducers";
 import { composeWithDevTools } from "redux-devtools-extension";
-
-import { recipeMocks } from "../mock/recipes.js";
 import { appReducer } from "../reducers/rootReducer";
 
-const { top3Recipes, recentRecipes } = recipeMocks;
 
 export function configureStore() {
   const middlewares = [logger, thunkMiddleware];
