@@ -3,17 +3,19 @@ import fetch from "cross-fetch";
 
 function setFetchWithXAuthToken(token) {
   return async (url, options) => {
+    // fetch = async (url, options) => {
     const optionHeaders = options.headers;
-    await fetch(url, {
+    return await fetch(url, {
       ...options,
       headers: { ...optionHeaders, "x-auth-token": token },
     });
   };
+  // };
 }
 
 export function setToken(token) {
   return (dispatch) => {
-    setFetchWithXAuthToken(token);
+    fetch = setFetchWithXAuthToken(token);
     dispatch({
       type: TOKEN_SUCCESS,
       payload: token,

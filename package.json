@@ -11,7 +11,7 @@
     "dev-server": "webpack-dev-server",
     "start": "nodemon server/server.js",
     "test": "export NODE_ENV=test && mocha ./server/test",
-    "store-test": "babel-tape-runner \"lib/**/__tests__/*-test.js\" "
+    "store-test": "babel-tape-runner \"lib/**/__tests__/*-test.js\" | faucet"
   },
   "author": "",
   "license": "ISC",
@@ -73,6 +73,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.20.0",
+    "faucet": "0.0.1",
     "jest": "^26.0.1",
     "redux-devtools-extension": "^2.13.8",
     "tape": "^5.0.1",

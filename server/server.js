@@ -43,10 +43,10 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
-app.use("/app/home/me", user);
-app.use("/app/home", express.static("public"));
-app.use("/app/home/me/profile", profile);
-app.use("/app/home/me/recipes", recipes);
+app.use("/app/home/me", user); //PRIVATE API
+app.use("/app/home/me/profile", profile); //PRIVATE API
+app.use("/app/home/me/recipes", recipes); //PRIVATE API
+app.use("/app/home", auth, express.static("public"));
 
 /**
  * --- Express Routes ---
@@ -65,7 +65,7 @@ app.get("/", auth, (req, res) => {
    * template page we pass it (in this case 'client/secret.ejs') as ejs and produce
    * a string of proper HTML which will be sent to the client!
    */
-  res.redirect("/app/home");
+  res.redirect("/signup");
 });
 
 /**

@@ -37,8 +37,8 @@ export default function App() {
   return (
     <ResponsiveLayout
       renderDesktop={renderDesktop}
-      breakpoint={false}
       renderMobile={() => null}
+      breakpoint={false}
     />
   );
 }
