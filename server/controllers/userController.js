@@ -22,7 +22,7 @@ userController.getAllUsers = (req, res, next) => {
     next();
   });
 };
-
+//saving userID to req.locals
 const getUserId = (req, res, userId) => {
   req.locals = {
     userId,

@@ -93,12 +93,13 @@ router.post(
       const profileFields = await createProfileFields(userId, req);
       //check to see if profile exists:
       let profile = await Profile.findOne({ user: userId });
-
-      await Profile.findOneAndUpdate(
-        { user: userId },
-        { $set: profileFields },
-        { new: true }
-      );
+      if (profile) {
+        await Profile.findOneAndUpdate(
+          { user: userId },
+          { $set: profileFields },
+          { new: true }
+        );
+      }
       return res.json({ profile });
     } catch (err) {
       res.status(500).send("Server Error");
