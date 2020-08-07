@@ -9,7 +9,8 @@ import React, {
 import Tag from "./Tag.jsx";
 import s from "./Tag.scss";
 import Modal from "../components/Common/Modal.jsx";
-//importing the tags from database
+import TagEditModal from "./TagEditModal.jsx";
+//TODO: importing the tags from database
 
 const mockTags = [
   {
@@ -41,11 +42,7 @@ export default function RecipeTags(props) {
 
   return (
     <div>
-      <div style={{ position: "absolute" }}>
-        {<Modal isOpen={isOpen} onClose={setModal} />}
-      </div>
-      <p>The current tag is : {isOpen}</p>
-      {/* <div className={s.container}> */}
+      <TagEditModal isOpen={isOpen} onClose={setModal}/>
       <ul>{tagList}</ul>
     </div>
   );

@@ -5,9 +5,11 @@ import { monitorReducerEnhancer } from "../enhancers/monitorReducers";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { appReducer } from "../reducers/rootReducer";
 
-
 export function configureStore() {
   const middlewares = [logger, thunkMiddleware];
+  //Think of applyMiddleware as a layer that redefines store.dispatch,
+  //so it can abstract away how store treats different types of actions
+  //e.g. store.dispatch(makeASandwichWithSecretSauce('Grandma'))
   const middlewareEnhancer = applyMiddleware(...middlewares);
   const enhancers = [middlewareEnhancer, monitorReducerEnhancer];
   const composedEnhancers = composeWithDevTools(...enhancers);
