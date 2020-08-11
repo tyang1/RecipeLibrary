@@ -12,7 +12,7 @@ const AnimatedDialogContent = animated(DialogContent);
 export const ModalSizingContext = createContext(null);
 
 export default function Modal(props) {
-  const { isOpen, onClose, children } = props;
+  const { isOpen, onClose, children, headerCaption } = props;
   const [showDialog, setShowDialog] = React.useState(false);
 
   const transitions = useTransition(isOpen, null, {
@@ -63,6 +63,7 @@ export default function Modal(props) {
                 borderRadius: 10,
               }}
             >
+              <h3>{headerCaption}</h3>
               <button onClick={() => onClose()}>Close Dialog</button>
               {children}
             </AnimatedDialogContent>

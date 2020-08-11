@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "../components/Common/Modal.jsx";
+import EditTag from "./EditTag.jsx";
 
 export default function TagEditModal(props) {
   const { colorPallet, isOpen, onClose, saveButton, deleteButton } = props;
@@ -9,9 +10,9 @@ export default function TagEditModal(props) {
   //delete tag
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <h2>Just a test</h2>
+    <Modal isOpen={isOpen} onClose={onClose} headerCaption="Edit Tags">
       <input value="input test" />
+      <EditTag />
     </Modal>
   );
 }
