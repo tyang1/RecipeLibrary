@@ -11,8 +11,9 @@ export default function TagEditModal(props) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} headerCaption="Edit Tags">
-      <input value="input test" />
+      {/* <Stack> */}
       <EditTag />
+      {/* </Stack> */}
     </Modal>
   );
 }
