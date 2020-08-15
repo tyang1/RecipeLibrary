@@ -42,8 +42,8 @@ function numberToPaper({ number, title, classes, selectHandler, value }) {
 }
 
 export default function TopItems(props) {
-  const classes = useStyles(value);
   const { title, number, selectHandler, value } = props;
+  const classes = useStyles(value);
   const paper = numberToPaper({ number, title, classes, selectHandler, value });
 
   return (

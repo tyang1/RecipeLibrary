@@ -5,7 +5,7 @@ import Content from "../components/Content.jsx";
 import ResponsiveLayout from "../components/ResponsiveLayout.jsx";
 import RecipeTags from "../components/RecipeTags.jsx";
 import { Provider } from "react-redux";
-// import { loadRecipes } from "../actions/user/api";
+import { loadRecipes } from "../actions/user/api";
 import { setAuth } from "../actions/auth/api";
 import { configureStore } from "../stores/configureStore";
 //ContentView components
@@ -35,11 +35,13 @@ export default function App() {
     );
   };
   return (
-    <ResponsiveLayout
-      renderDesktop={renderDesktop}
-      renderMobile={() => null}
-      breakpoint={false}
-    />
+    <>
+      <ResponsiveLayout
+        renderDesktop={renderDesktop}
+        renderMobile={() => null}
+        breakpoint={false}
+      />
+    </>
   );
 }
 

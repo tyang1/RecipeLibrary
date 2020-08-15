@@ -5,6 +5,9 @@ import {
   TOKEN_SUCCESS,
 } from "../actions/types";
 
+import { recipeMocks } from "../mock/recipes.js";
+const { top3Recipes, recentRecipes } = recipeMocks;
+
 function getStorageItem(item) {
   if (typeof window !== "undefined") {
     return localStorage.getItem(item);
@@ -16,8 +19,8 @@ const defaultState = {
   isLoading: true,
   token: getStorageItem("token"),
   isAuthenticated: false,
-  top3Recipes: [],
-  recentRecipes: [],
+  top3Recipes,
+  recentRecipes,
 };
 
 export function appReducer(state = defaultState, action = {}) {
@@ -26,7 +29,7 @@ export function appReducer(state = defaultState, action = {}) {
     case GET_RECOMMENDED:
       return {
         ...state,
-        recentRecipes: payload,
+        recentRecipes: payload || state.recentRecipes,
         isLoading: false,
       };
     case TOKEN_SUCCESS:

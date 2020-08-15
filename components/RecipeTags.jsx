@@ -9,21 +9,22 @@ import React, {
 import Tag from "./Tag.jsx";
 import s from "./Tag.scss";
 import Modal from "../components/Common/Modal.jsx";
-//importing the tags from database
+import TagEditModal from "./TagEditModal.jsx";
+//TODO: importing the tags from database
 
 const mockTags = [
   {
-    label: "Breafjdksjflsjdkljkjljkjkfjslkfast",
+    name: "Breafjdksjflsjdkljkjljkjkfjslkfast",
     _id: "dkfjksl76868",
     color: "#03619c",
   },
   {
-    label: "Lunch",
+    name: "Lunch",
     _id: "xjkcfjkl2343",
     color: "#8c8f03",
   },
   {
-    label: "Dinner",
+    name: "Dinner",
     _id: "jkdjfkj9998",
     color: "#03619c",
   },
@@ -31,21 +32,41 @@ const mockTags = [
 
 export default function RecipeTags(props) {
   const [tags, setTags] = useState(mockTags);
-  const [current, setCurrent] = useState(null);
+  const [currentTagIndex, setcurrentTagIndex] = useState(null);
   const [isOpen, setModal] = useState(false);
-  const onEdit = (newValue) => {
-    setCurrent(newValue);
+  const onEdit = (currId) => {
+    let matchedIndex = tags.findIndex((tag) => {
+      return tag._id == currId;
+    });
+    setcurrentTagIndex(matchedIndex);
     setModal(true);
   };
-  let tagList = tags.map((tag) => <Tag onEdit={onEdit} category={tag} />);
+  let tagList = tags.map((tag) => (
+    <Tag key={tag._id} onEdit={onEdit} category={tag} />
+  ));
+
+  const updateSubject = (subjectChange) => {
+    setTags(tagUpdate({ tags, subjectChange }));
+  };
+
+  function tagUpdate({ tags, subjectChange }) {
+    return tags.map((tag, index) => {
+      if (index === currentTagIndex) {
+        return subjectChange;
+      } else {
+        return tag;
+      }
+    });
+  }
 
   return (
     <div>
-      <div style={{ position: "absolute" }}>
-        {<Modal isOpen={isOpen} onClose={setModal} />}
-      </div>
-      <p>The current tag is : {isOpen}</p>
-      {/* <div className={s.container}> */}
+      <TagEditModal
+        isOpen={isOpen}
+        onClose={setModal}
+        onSave={updateSubject}
+        current={tags[currentTagIndex]}
+      />
       <ul>{tagList}</ul>
     </div>
   );

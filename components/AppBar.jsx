@@ -49,7 +49,7 @@ export default function RecipeMenu(props) {
           <Tab label="My Recipe" />
           <Tab label="Recipe Library" />
           <Tab label="Categories" />
-          <Tab label="Recipes" />
+          <Tab label="Recipe Newsfeed" />
         </Tabs>
       </AppBar>
     </div>
