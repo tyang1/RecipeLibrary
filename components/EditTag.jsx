@@ -18,14 +18,27 @@ import FlexRow from "./layout/FlexRow.jsx";
 
 const EditTag = (props) => {
   const [deleteShowing, setDeleteShowing] = useState(false);
-  const { subject, onCancelEdit } = props;
+  const { subject, onCancelEdit, onSave, current } = props;
 
-  const test = { name: "happy", backgroundColor: "pink", textColor: "white" };
+  const initialTag = {
+    name: "happy",
+    backgroundColor: "pink",
+    textColor: "white",
+  };
 
-  const [editingSubject, setEditingSubject] = useState(test);
+  console.log("current", current);
+
+  const [editingSubject, setEditingSubject] = useState(current || initialTag);
   return (
     <EditSubjectFields
-      {...{ editingSubject, setEditingSubject, onCancelEdit, setDeleteShowing }}
+      {...{
+        editingSubject,
+        setEditingSubject,
+        onCancelEdit,
+        current,
+        setDeleteShowing,
+        onSave,
+      }}
     />
   );
 };
@@ -36,7 +49,10 @@ const EditSubjectFields = (props) => {
     setEditingSubject,
     onCancelEdit,
     setDeleteShowing,
+    onSave,
   } = props;
+
+  console.log("editsubjectfield", editingSubject);
 
   //   const { subjectHash } = useSubjectsState();
   //   const { colors } = useColors();
@@ -49,11 +65,14 @@ const EditSubjectFields = (props) => {
     textColor: "black",
   };
 
-  //   const { runMutation: updateSubject, running: isSubjectSaving } = useMutation<MutationOf<Mutations["updateSubject"]>>(UpdateSubjectMutation);
+  // const { runMutation: onSave, running: isSubjectSaving } = useMutation[
+  //   "onSave"
+  // ](onSaveMutation);
 
   const textColors = ["#ffffff", "#000000"];
 
   const [missingName, setMissingName] = useState(false);
+
   const setEditingSubjectField = (prop, value) => {
     if (prop == "name" && value.trim()) {
       setMissingName(false);
@@ -66,22 +85,10 @@ const EditSubjectFields = (props) => {
       return setMissingName(true);
     }
 
-    let {
-      _id,
-      name,
-      parentId,
-      backgroundColor,
-      textColor,
-    } = editingSubject || {
-      _id: 0,
-      name: "test1",
-      parentId: 1,
-      backgroundColor: "pink",
-      textColor: "black",
-    };
-    let request = { _id, name, parentId, backgroundColor, textColor };
+    let { _id, name, parentId, backgroundColor, textColor } = editingSubject;
 
-    // Promise.resolve(updateSubject(request)).then(onCancelEdit);
+    let request = { _id, name, parentId, backgroundColor, textColor };
+    Promise.resolve(onSave(request)).then(onCancelEdit);
   };
 
   const subjectEditingKeyDown = (evt) => {
@@ -113,8 +120,9 @@ const EditSubjectFields = (props) => {
             (editingSubject && editingSubject.backgroundColor) || "pink"
           }
           colors={["blue", "green"]}
-          onColorChosen={(color) =>
-            setEditingSubjectField("backgroundColor", color)
+          onColorChosen={
+            (color) => setEditingSubjectField("backgroundColor", color)
+            //
           }
         />
       </FlexRow>
@@ -123,6 +131,7 @@ const EditSubjectFields = (props) => {
         <ColorsPalette
           colors={textColors}
           onColorChosen={(color) => setEditingSubjectField("textColor", color)}
+          //
         />
       </FlexRow>
     </>

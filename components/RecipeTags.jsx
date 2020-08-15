@@ -14,17 +14,17 @@ import TagEditModal from "./TagEditModal.jsx";
 
 const mockTags = [
   {
-    label: "Breafjdksjflsjdkljkjljkjkfjslkfast",
+    name: "Breafjdksjflsjdkljkjljkjkfjslkfast",
     _id: "dkfjksl76868",
     color: "#03619c",
   },
   {
-    label: "Lunch",
+    name: "Lunch",
     _id: "xjkcfjkl2343",
     color: "#8c8f03",
   },
   {
-    label: "Dinner",
+    name: "Dinner",
     _id: "jkdjfkj9998",
     color: "#03619c",
   },
@@ -32,17 +32,47 @@ const mockTags = [
 
 export default function RecipeTags(props) {
   const [tags, setTags] = useState(mockTags);
-  const [current, setCurrent] = useState(null);
+  const [currentTagIndex, setcurrentTagIndex] = useState(null);
   const [isOpen, setModal] = useState(false);
-  const onEdit = (newValue) => {
-    setCurrent(newValue);
+  const onEdit = (currId) => {
+    let matchedIndex = tags.findIndex((tag) => {
+      console.log("test of tag._id", tag._id, currId);
+      return tag._id == currId;
+    });
+    console.log("onEdit", matchedIndex);
+    setcurrentTagIndex(matchedIndex);
     setModal(true);
   };
-  let tagList = tags.map((tag) => <Tag onEdit={onEdit} category={tag} />);
+  let tagList = tags.map((tag) => (
+    <Tag key={tag._id} onEdit={onEdit} category={tag} />
+  ));
+
+  const updateSubject = (subjectChange) => {
+    console.log("updateSubject", subjectChange);
+    setTags((tags) => {
+      tagUpdate({ tags, subjectChange });
+    });
+  };
+
+  function tagUpdate({ tags, subjectChange }) {
+    console.log("inside tagUpdate", subjectChange);
+    return tags.map((tag) => {
+      if (tag._id === currentTagIndex) {
+        return subjectChange;
+      } else {
+        return tag;
+      }
+    });
+  }
 
   return (
     <div>
-      <TagEditModal isOpen={isOpen} onClose={setModal}/>
+      <TagEditModal
+        isOpen={isOpen}
+        onClose={setModal}
+        onSave={updateSubject}
+        current={tags[currentTagIndex]}
+      />
       <ul>{tagList}</ul>
     </div>
   );

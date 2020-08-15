@@ -11,7 +11,7 @@ export default function Tag(props) {
     <li style={{ display: "list-item" }}>
       <div>
         <span className={s.item}>
-          <span>{category.label}</span>
+          <span>{category.name}</span>
           <a
             onClick={() => onEdit(_id)}
             style={{ cursor: "pointer", marginLeft: "7px" }}
