@@ -18,9 +18,20 @@ export default function TagEditModal(props) {
   //delete tag
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} headerCaption="Edit Tags">
+    <Modal
+      isModalOpen={isOpen}
+      onModalClose={onClose}
+      headerCaption="Edit Tags"
+    >
       {/* <Stack> */}
-      <EditTag curren={current} onSave={onSave} onCancelEdit={() => {}} />
+      {({ onModalClose }) => (
+        <EditTag
+          onClose={onModalClose}
+          curren={current}
+          onSave={onSave}
+          onCancelEdit={() => {}}
+        />
+      )}
       {/* </Stack> */}
     </Modal>
   );

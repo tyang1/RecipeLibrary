@@ -36,10 +36,8 @@ export default function RecipeTags(props) {
   const [isOpen, setModal] = useState(false);
   const onEdit = (currId) => {
     let matchedIndex = tags.findIndex((tag) => {
-      console.log("test of tag._id", tag._id, currId);
       return tag._id == currId;
     });
-    console.log("onEdit", matchedIndex);
     setcurrentTagIndex(matchedIndex);
     setModal(true);
   };
@@ -48,16 +46,12 @@ export default function RecipeTags(props) {
   ));
 
   const updateSubject = (subjectChange) => {
-    console.log("updateSubject", subjectChange);
-    setTags((tags) => {
-      tagUpdate({ tags, subjectChange });
-    });
+    setTags(tagUpdate({ tags, subjectChange }));
   };
 
   function tagUpdate({ tags, subjectChange }) {
-    console.log("inside tagUpdate", subjectChange);
-    return tags.map((tag) => {
-      if (tag._id === currentTagIndex) {
+    return tags.map((tag, index) => {
+      if (index === currentTagIndex) {
         return subjectChange;
       } else {
         return tag;

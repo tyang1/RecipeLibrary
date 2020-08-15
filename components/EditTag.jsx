@@ -9,6 +9,7 @@ import React, {
 
 // import { useColors } from "app/state/colorsState";
 import ColorsPalette from "../components/Common/ColorsPalette.jsx";
+import Tag from "../components/Tag.jsx";
 
 import cn from "classnames";
 import FlexRow from "./layout/FlexRow.jsx";
@@ -18,7 +19,7 @@ import FlexRow from "./layout/FlexRow.jsx";
 
 const EditTag = (props) => {
   const [deleteShowing, setDeleteShowing] = useState(false);
-  const { subject, onCancelEdit, onSave, current } = props;
+  const { subject, onCancelEdit, onSave, current, onClose } = props;
 
   const initialTag = {
     name: "happy",
@@ -36,6 +37,7 @@ const EditTag = (props) => {
         setEditingSubject,
         onCancelEdit,
         current,
+        onClose,
         setDeleteShowing,
         onSave,
       }}
@@ -49,6 +51,7 @@ const EditSubjectFields = (props) => {
     setEditingSubject,
     onCancelEdit,
     setDeleteShowing,
+    onClose,
     onSave,
   } = props;
 
@@ -102,6 +105,11 @@ const EditSubjectFields = (props) => {
     }
   };
 
+  const onSaveHandler = (editingSubject) => {
+    onSave(editingSubject);
+    onClose();
+  };
+
   return (
     <>
       <FlexRow>
@@ -112,6 +120,9 @@ const EditSubjectFields = (props) => {
           value={editingSubject.name}
           className={cn("form-control", { error: missingName })}
         />
+        {!editingSubject.name.length ? null : (
+          <Tag Editable={false} category={{ name: editingSubject.name }} />
+        )}
       </FlexRow>
       <FlexRow>
         <label>Label Color</label>
@@ -133,6 +144,9 @@ const EditSubjectFields = (props) => {
           onColorChosen={(color) => setEditingSubjectField("textColor", color)}
           //
         />
+      </FlexRow>
+      <FlexRow>
+        <button onClick={() => onSaveHandler(editingSubject)}>Save</button>
       </FlexRow>
     </>
   );
