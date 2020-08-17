@@ -62,16 +62,14 @@ router.get("/", auth, async (req, res) => {
     // res.sendFile("index.html", { root: path.join(__dirname, "../../public") });
     //TODO: restore the following:
     let { userId } = req.user;
-    let profile = await Profile.findOne({ user: userId });
-    if (profile) {
-      res.status(200).send(profile);
-    } else {
+    let result = await Profile.findOne({ user: userId });
+    if (!result) {
       const profileFields = await createProfileFields(userId, {});
       //create profile
-      profile = new Profile(profileFields);
-      await profile.save();
-      return res.json({ profile });
+      result = new Profile(profileFields);
+      await result.save();
     }
+    return res.status(200).send(result);
   } catch (err) {
     res.status(500).send("Server error");
   }

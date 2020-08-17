@@ -17,7 +17,7 @@ router.get("/", auth, async (req, res) => {
   try {
     let profile = await Profile.find({ user: userId });
     console.log("recipes: profile", profile);
-    if (!profile) {
+    if (!profile || !profile.length) {
       res.status(400).json({ msg: "No profile found" });
     } else {
       //   res.send(profile);
