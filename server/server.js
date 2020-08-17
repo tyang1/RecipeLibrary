@@ -43,7 +43,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "../client"));
-app.use("/app/home/me", user); //PRIVATE API
+app.get("/app/home/me", user); //PRIVATE API
 app.use("/app/home/me/profile", profile); //PRIVATE API
 app.use("/app/home/me/recipes", recipes); //PRIVATE API
 app.use("/app/home", auth, express.static("public"));
@@ -106,6 +106,8 @@ app.post(
  * Authorized routes
  */
 
-app.listen(3000);
+app.listen(3000, () => {
+  console.log("Listening on port 3000");
+});
 
 module.exports = app;

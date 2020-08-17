@@ -22,6 +22,11 @@ export function setToken(token) {
     });
   };
 }
+
+export async function initRecipeApp() {
+  await setAuth();
+  await getProfileRecipes();
+}
 export function setAuth() {
   return async (dispatch) => {
     let res = await fetch("http://localhost:3000/app/home/me");
@@ -40,5 +45,11 @@ export function setAuth() {
         payload: true,
       });
     }
+  };
+}
+
+export function getProfileRecipes() {
+  return async () => {
+    //fetch the recipes from the user databased
   };
 }

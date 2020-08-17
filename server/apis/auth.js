@@ -8,15 +8,17 @@ const config = require("config");
 module.exports = function (req, res, next) {
   //get the token from the header
   console.log("auth", req.header("x-auth-token"));
-  console.log("cookies auth", req.cookies["access_token"]);
+  // console.log("cookies auth", req.cookies["access_token"] !== undefined);
   //NOTE: you need to check the header(request from client), or after successful signup(token saved in cookies)
   const token = req.header("x-auth-token") || req.cookies["access_token"];
   if (
     !token ||
     (req.header("x-auth-token") &&
+      req.cookies["access_token"] !== undefined &&
       req.header("x-auth-token") !== req.cookies["access_token"])
   ) {
     // return res.render("index");
+    console.log("token and cookies do not matched, return to signup");
     res.redirect("/signup");
     return;
     // return res.status(401).json({ msg: "Token does not exist, auth denied" });
@@ -30,7 +32,7 @@ module.exports = function (req, res, next) {
     console.error(err);
     res.status(401).json({ msg: "Token is not valid" });
   }
-  //if token is not there then return 401
+  //if token is not there then return 401S
   //if token is not verified, then return 401
   //else allow to move to next();
 };

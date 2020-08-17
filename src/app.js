@@ -6,7 +6,7 @@ import ResponsiveLayout from "../components/ResponsiveLayout.jsx";
 import RecipeTags from "../components/RecipeTags.jsx";
 import { Provider } from "react-redux";
 import { loadRecipes } from "../actions/user/api";
-import { setAuth } from "../actions/auth/api";
+import { initRecipeApp } from "../actions/auth/api";
 import { configureStore } from "../stores/configureStore";
 //ContentView components
 import MyRecipe from "../components/MyRecipe.jsx";
@@ -15,7 +15,7 @@ export const store = configureStore();
 
 export default function App() {
   useEffect(async () => {
-    store.dispatch(setAuth());
+    store.dispatch(initRecipeApp());
   }, []);
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -54,7 +54,7 @@ function renderApp() {
   );
 }
 
-//module.hot.accept(param1: module to be hot reloaded, param2: what needs to happen)
+//NOTE: module.hot.accept(param1: module to be hot reloaded, param2: what needs to happen)
 if (process.env.NODE_ENV !== "production" && module.hot) {
   module.hot.accept("../components/ResponsiveLayout", renderApp);
 }

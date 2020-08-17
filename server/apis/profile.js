@@ -57,6 +57,7 @@ async function createProfileFields(userId, req = {}) {
 //@access Private
 // router.get("/", auth, async (req, res) => {
 router.get("/", auth, async (req, res) => {
+  console.log("profile: get profile", req.user.userId);
   try {
     // res.sendFile("index.html", { root: path.join(__dirname, "../../public") });
     //TODO: restore the following:
