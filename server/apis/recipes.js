@@ -11,18 +11,20 @@ const auth = require("../apis/auth");
 
 //TODO, add auth here as well
 router.get("/", auth, async (req, res) => {
-  //   const userId = req.params.uid;
   const userId = req.user.userId;
+  console.log("inside get recipes", userId);
+  //   const userId = req.params.uid;
   try {
     let profile = await Profile.find({ user: userId });
-    if (!profile) {
+    console.log("recipes: profile", profile);
+    if (!profile || !profile.length) {
       res.status(400).json({ msg: "No profile found" });
     } else {
       //   res.send(profile);
-      res.json(JSON.stringify(profile[0].recommendedRecipes));
+      res.json(profile[0].recommendedRecipes);
     }
   } catch (err) {
-    res.status(500).send("server error");
+    res.status(500).send("server error", err);
   }
 });
 

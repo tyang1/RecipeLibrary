@@ -7,8 +7,8 @@ const router = express.Router();
 
 module.exports = function (req, res, next) {
   //get the token from the header
-  console.log("auth", req.header("x-auth-token"));
-  console.log("cookies auth", req.cookies["access_token"]);
+  console.log("user: auth", req.header("x-auth-token"));
+  console.log("user: cookies auth", req.cookies["access_token"]);
   const token = req.header("x-auth-token") || req.cookies["access_token"];
   if (!token) {
     return res.render("index");

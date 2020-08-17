@@ -13,7 +13,7 @@ export const ModalSizingContext = createContext(null);
 
 export default function Modal(props) {
   const { isModalOpen, onModalClose, children, headerCaption } = props;
-  const [showDialog, setShowDialog] = React.useState(false);
+  // const [showDialog, setShowDialog] = React.useState(false);
 
   const transitions = useTransition(isModalOpen, null, {
     from: { opacity: 0, y: -10 },

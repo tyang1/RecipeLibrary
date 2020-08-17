@@ -19,19 +19,19 @@ const defaultState = {
   isLoading: true,
   token: getStorageItem("token"),
   isAuthenticated: false,
-  top3Recipes,
+  top3Recipes: [],
   recentRecipes,
 };
 
 export function appReducer(state = defaultState, action = {}) {
   const { type, payload } = action;
   switch (type) {
-    case GET_RECOMMENDED:
-      return {
-        ...state,
-        recentRecipes: payload || state.recentRecipes,
-        isLoading: false,
-      };
+    // case GET_RECENT_RECIPES:
+    //   return {
+    //     ...state,
+    //     recentRecipes: payload || state.recentRecipes,
+    //     isLoading: false,
+    //   };
     case TOKEN_SUCCESS:
       return {
         ...state,
@@ -43,6 +43,11 @@ export function appReducer(state = defaultState, action = {}) {
         ...state,
         isAuthenticated: payload,
         isLoading: false,
+      };
+    case GET_RECOMMENDED:
+      return {
+        ...state,
+        top3Recipes: payload || state.top3Recipes,
       };
     default:
       return state;
